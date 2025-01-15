@@ -1,5 +1,12 @@
 const fastify = require('fastify')({ logger: true });
 const fs = require('fs');
+const path = require('path');
+const fastifyStatic = require('fastify-static');
+
+fastify.register(fastifyStatic, {
+    root: path.join(__dirname, 'public'), // Assurez-vous que votre index.html est dans le dossier 'public'
+    prefix: '/', // Chemin où le fichier sera accessible
+});
 
 // Fichiers JSON pour les utilisateurs et les messages
 const USERS_FILE = './users.json';
