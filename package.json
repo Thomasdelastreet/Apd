@@ -1,19 +1,18 @@
 {
   "name": "fastify-chat-app",
   "version": "1.0.0",
-  "description": "Une application de chat avec Fastify et une interface HTML.",
+  "description": "A simple Fastify chat app",
   "main": "server.js",
-  "scripts": 
-  {
+  "scripts": {
     "start": "node server.js"
- "dependencies": {
-  "fastify": "^3.0.0",
-  "fastify-static": "^3.0.0"
-}
-  "engines": {
-    "node": ">=14.0.0"
   },
-  "devDependencies": {},
-  "author": "Thomas bernard",
+  "dependencies": {
+    "fastify": "^4.29.0",
+    "fastify-static": "^4.0.0"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "author": "Your Name",
   "license": "MIT"
 }
