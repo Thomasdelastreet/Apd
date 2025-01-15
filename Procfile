@@ -1,1 +1,1 @@
-npm install fastify-static
+web: node server.js
