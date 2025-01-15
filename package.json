@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "Une application de chat avec Fastify et une interface HTML.",
   "main": "server.js",
-  "scripts": {
+  "scripts": 
+  {
     "start": "node server.js"
-  },
-  "dependencies": {
-    "fastify": "^4.13.0",
-    "fastify-static": "^4.5.0"
-  },
+ "dependencies": {
+  "fastify": "^3.0.0",
+  "fastify-static": "^3.0.0"
+}
+
   "engines": {
     "node": ">=14.0.0"
   },
