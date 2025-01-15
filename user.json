@@ -1,0 +1,80 @@
+{
+  "users": [
+    {
+      "username": "romane",
+      "password": "hashed_password"
+    },
+    {
+      "username": "leni",
+      "password": "hashed_password"
+    },
+    {
+      "username": "toto l'admin",
+      "password": "hashed_password"
+    },
+    {
+      "username": "corentin",
+      "password": "hashed_password"
+    },
+    {
+      "username": "lucie",
+      "password": "hashed_password"
+    },
+    {
+      "username": "heather",
+      "password": "hashed_password"
+    },
+    {
+      "username": "Camylle",
+      "password": "hashed_password"
+    },
+    {
+      "username": "Maëlane",
+      "password": "hashed_password"
+    },
+    {
+      "username": "Sacha F",
+      "password": "hashed_password"
+    },
+    {
+      "username": "Maëlys",
+      "password": "hashed_password"
+    },
+    {
+      "username": "océane",
+      "password": "hashed_password"
+    },
+    {
+      "username": "pierre baiste",
+      "password": "hashed_password"
+    },
+    {
+      "username": "ulysse",
+      "password": "hashed_password"
+    },
+    {
+      "username": "etienne",
+      "password": "hashed_password"
+    },
+    {
+      "username": "hugo",
+      "password": "hashed_password"
+    },
+    {
+      "username": "sabrina",
+      "password": "hashed_password"
+    },
+    {
+      "username": "loïs",
+      "password": "hashed_password"
+    },
+    {
+      "username": "Sacha T",
+      "password": "hashed_password"
+    },
+    {
+      "username": "madly",
+      "password": "hashed_password"
+    }
+  ]
+}
