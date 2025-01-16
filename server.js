@@ -1,57 +1,63 @@
 const fastify = require('fastify')({ logger: true });
-const fs = require('fs');
 const path = require('path');
-const fastifyStatic = require('fastify-static');
+const fs = require('fs');
 
+// Charger les bases de données JSON
+const usersDB = JSON.parse(fs.readFileSync('./user.json', 'utf-8'));
+const messagesDBPath = './messages.json';
+
+// Plugin pour servir les fichiers statiques
+const fastifyStatic = require('@fastify/static');
 fastify.register(fastifyStatic, {
-    root: path.join(__dirname, 'public'), // Assurez-vous que votre index.html est dans le dossier 'public'
-    prefix: '/', // Chemin où le fichier sera accessible
+  root: path.join(__dirname, 'public'),
+  prefix: '/public/',
 });
 
-// Fichiers JSON pour les utilisateurs et les messages
-const USERS_FILE = './users.json';
-const MESSAGES_FILE = './messages.json';
+// Route pour la page principale
+fastify.get('/', async (request, reply) => {
+  reply.sendFile('index.html');
+});
 
-// Fonction pour lire un fichier JSON
-function readJson(file) {
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
-}
-
-// Fonction pour écrire dans un fichier JSON
-function writeJson(file, data) {
-    fs.writeFileSync(file, JSON.stringify(data, null, 4));
-}
-
-// Route de connexion
+// Route pour se connecter
 fastify.post('/login', async (request, reply) => {
-    const { username, password } = request.body;
-    const users = readJson(USERS_FILE).users;
+  const { username, password } = request.body;
 
-    const user = users.find(u => u.username === username && u.password === password);
-    if (user) {
-        return { message: 'Connexion réussie' };
-    } else {
-        reply.code(401);
-        return { error: 'Nom d\'utilisateur ou mot de passe incorrect' };
-    }
+  const user = usersDB.users.find(
+    (u) => u.username === username && u.password === password
+  );
+
+  if (user) {
+    return { success: true, message: 'Connexion réussie !' };
+  } else {
+    return { success: false, message: 'Identifiants incorrects.' };
+  }
 });
 
-// Route pour sauvegarder un message
-fastify.post('/save_message', async (request, reply) => {
-    const { message } = request.body;
-    const messages = readJson(MESSAGES_FILE).messages;
+// Route pour envoyer un message
+fastify.post('/message', async (request, reply) => {
+  const { username, message } = request.body;
 
-    messages.push({ message });
-    writeJson(MESSAGES_FILE, { messages });
+  if (!username || !message) {
+    return { success: false, message: 'Données manquantes.' };
+  }
 
-    return { message: 'Message sauvegardé avec succès' };
+  // Charger les messages existants et ajouter le nouveau
+  const messagesDB = JSON.parse(fs.readFileSync(messagesDBPath, 'utf-8'));
+  messagesDB.messages.push({ username, message, timestamp: new Date() });
+
+  fs.writeFileSync(messagesDBPath, JSON.stringify(messagesDB, null, 2));
+
+  return { success: true, message: 'Message sauvegardé !' };
 });
 
-// Démarrer le serveur Fastify
-fastify.listen(3000, (err, address) => {
-    if (err) {
-        fastify.log.error(err);
-        process.exit(1);
-    }
-    fastify.log.info(`Serveur en cours d'exécution sur ${address}`);
-});
+// Démarrer le serveur
+const start = async () => {
+  try {
+    await fastify.listen({ port: 3000, host: '0.0.0.0' });
+    fastify.log.info(`Serveur démarré sur : ${fastify.server.address().port}`);
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+};
+start();
