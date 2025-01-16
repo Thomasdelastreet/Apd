@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Railway App</title>
+  <script>
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const result = await response.json();
+      alert(result.message);
+    }
+
+    async function sendMessage() {
+      const username = document.getElementById('username').value;
+      const message = document.getElementById('message').value;
+
+      const response = await fetch('/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, message }),
+      });
+
+      const result = await response.json();
+      alert(result.message);
+    }
+  </script>
+</head>
+<body>
+  <h1>Railway App</h1>
+  <div>
+    <h2>Connexion</h2>
+    <input id="username" type="text" placeholder="Nom d'utilisateur" /><br />
+    <input id="password" type="password" placeholder="Mot de passe" /><br />
+    <button onclick="login()">Se connecter</button>
+  </div>
+  <div>
+    <h2>Envoyer un message</h2>
+    <textarea id="message" placeholder="Votre message"></textarea><br />
+    <button onclick="sendMessage()">Envoyer</button>
+  </div>
+</body>
+</html>
