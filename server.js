@@ -1,63 +1,49 @@
-const fastify = require('fastify')({ logger: true });
+const fastify = require('fastify')();
 const path = require('path');
 const fs = require('fs');
 
-// Charger les bases de données JSON
-const usersDB = JSON.parse(fs.readFileSync('./user.json', 'utf-8'));
-const messagesDBPath = './messages.json';
+// Charger les données utilisateurs et messages
+const usersPath = path.join(__dirname, 'user.json');
+const messagesPath = path.join(__dirname, 'messages.json');
 
-// Plugin pour servir les fichiers statiques
-const fastifyStatic = require('@fastify/static');
-fastify.register(fastifyStatic, {
+let users = JSON.parse(fs.readFileSync(usersPath, 'utf-8'));
+let messages = JSON.parse(fs.readFileSync(messagesPath, 'utf-8'));
+
+// Route pour servir les fichiers statiques
+fastify.register(require('@fastify/static'), {
   root: path.join(__dirname, 'public'),
-  prefix: '/public/',
+  prefix: '/',
 });
 
-// Route pour la page principale
-fastify.get('/', async (request, reply) => {
-  reply.sendFile('index.html');
-});
-
-// Route pour se connecter
-fastify.post('/login', async (request, reply) => {
-  const { username, password } = request.body;
-
-  const user = usersDB.users.find(
-    (u) => u.username === username && u.password === password
-  );
+// Route pour gérer la connexion
+fastify.post('/login', (req, reply) => {
+  const { username, password } = req.body;
+  const user = users.find((u) => u.username === username && u.password === password);
 
   if (user) {
-    return { success: true, message: 'Connexion réussie !' };
+    reply.send({ status: 'success', message: 'Connexion réussie !' });
   } else {
-    return { success: false, message: 'Identifiants incorrects.' };
+    reply.code(401).send({ status: 'error', message: 'Identifiants invalides.' });
   }
 });
 
 // Route pour envoyer un message
-fastify.post('/message', async (request, reply) => {
-  const { username, message } = request.body;
+fastify.post('/message', (req, reply) => {
+  const { username, message } = req.body;
 
   if (!username || !message) {
-    return { success: false, message: 'Données manquantes.' };
+    return reply.code(400).send({ status: 'error', message: 'Données manquantes.' });
   }
 
-  // Charger les messages existants et ajouter le nouveau
-  const messagesDB = JSON.parse(fs.readFileSync(messagesDBPath, 'utf-8'));
-  messagesDB.messages.push({ username, message, timestamp: new Date() });
+  const newMessage = { username, message, timestamp: new Date().toISOString() };
+  messages.push(newMessage);
 
-  fs.writeFileSync(messagesDBPath, JSON.stringify(messagesDB, null, 2));
-
-  return { success: true, message: 'Message sauvegardé !' };
+  fs.writeFileSync(messagesPath, JSON.stringify(messages, null, 2));
+  reply.send({ status: 'success', message: 'Message envoyé !' });
 });
 
 // Démarrer le serveur
-const start = async () => {
-  try {
-    await fastify.listen({ port: 3000, host: '0.0.0.0' });
-    fastify.log.info(`Serveur démarré sur : ${fastify.server.address().port}`);
-  } catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-};
-start();
+fastify.listen({ port: process.env.PORT || 3000, host: '0.0.0.0' }, (err, address) => {
+  if (err) throw err;
+  console.log(`Serveur en cours d'exécution sur ${address}`);
+});
