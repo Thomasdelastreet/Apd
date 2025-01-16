@@ -1,14 +1,13 @@
 {
-  "name": "railway-fastify-app",
+  "name": "application-railway",
   "version": "1.0.0",
-  "description": "Application web déployée sur Railway",
+  "description": "Application avec Railway",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "fastify": "^4.29.0",
-    "@fastify/static": "^5.0.0",
-    "path": "^0.12.7"
+    "@fastify/static": "^5.0.0"
   }
 }
