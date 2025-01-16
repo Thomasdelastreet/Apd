@@ -1,18 +1,14 @@
 {
-  "name": "fastify-chat-app",
+  "name": "railway-fastify-app",
   "version": "1.0.0",
-  "description": "A simple Fastify chat app",
+  "description": "Application web déployée sur Railway",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "fastify": "^4.29.0",
-    "fastify-static": "^4.0.0"
-  },
-  "engines": {
-    "node": "16.x"
-  },
-  "author": "Your Name",
-  "license": "MIT"
+    "@fastify/static": "^5.0.0",
+    "path": "^0.12.7"
+  }
 }
